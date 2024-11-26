@@ -27,6 +27,7 @@ ROTATE_KOUKATON = {
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+
 def check_bound(rct):
     """
     引数で与えられたrctが画面の中か外を判定する
@@ -126,7 +127,7 @@ def main():
         print(type(sum_mv))
         kkr_img = get_rotate(tuple(sum_mv))  # こうかとんの向き決定
 
-        #こうかとんが画面内なら元の場所に戻す
+        # こうかとんが画面内なら元の場所に戻す
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         bb_rct.move_ip(vx, vy)

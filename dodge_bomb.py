@@ -11,6 +11,21 @@ DELTA = {
     pg.K_RIGHT: (+5, 0),
     pg.K_LEFT: (-5, 0),
 }
+# 回転したこうかとんの辞書
+import os
+print(os.getcwd())
+kk_img = pg.transform.rotozoom(pg.image.load("ex2/fig/3.png"), 0, 0.9)
+ROTATE_KOUKATON = {
+    pg.transform.rotate(kk_img, 45 * 0): (5, 0),  # 単位円上に原点より45度づつ回転
+    pg.transform.rotate(kk_img, 45 * 1): (5, -5),
+    pg.transform.rotate(kk_img, 45 * 1): (0, -5),
+    pg.transform.rotate(kk_img, 45 * 3): (-5, -5),
+    pg.transform.rotate(kk_img, 45 * 4): (-5, 0),
+    pg.transform.rotate(kk_img, 45 * 5): (-5, 5),
+    pg.transform.rotate(kk_img, 45 * 6): (0, 5),
+    pg.transform.rotate(kk_img, 45 * 7): (5, 5),
+}
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def check_bound(rct):
@@ -50,7 +65,7 @@ def game_over(img):
     kk_left_rect = kk_left_img.get_rect()
     kk_left_rect.center = 550 - 200, 325
 
-    # 1秒の処理を5回繰り返す, 5秒間
+    # 1秒の処理を5回繰り返す, よって5秒間
     for i in range(5):
         screen.blit(img, [0, 0])
         screen.blit(black_img, [0, 0])
@@ -60,6 +75,16 @@ def game_over(img):
         pg.display.update()
         clock.tick(1)
         print(f"{i + 1}秒")
+
+def get_rotate(sum_mv):
+    """
+    sum_mvの移動量からこうかとんの向きを決定する
+    引数: sum_mvなどx, yの移動量
+    戻り値: 回転されたこうかとんimg
+    """
+    for img, mv in ROTATE_KOUKATON.items():
+        if mv == sum_mv:
+            return img
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -93,7 +118,11 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
-        kk_rct.move_ip(sum_mv)
+        
+        kk_rct.move_ip(tuple(sum_mv))
+        print(type(sum_mv))
+        kkr_img = get_rotate(tuple(sum_mv))  # こうかとんの向き決定
+
         #こうかとんが画面内なら元の場所に戻す
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
@@ -104,7 +133,8 @@ def main():
         if tate == False:
             vy *= -1
 
-        screen.blit(kk_img, kk_rct)
+        # screen.blit(kk_img, kk_rct)
+        screen.blit(kkr_img, kk_rct)
         screen.blit(bb_img, bb_rct)
         pg.display.update()
         tmr += 1

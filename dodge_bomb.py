@@ -8,8 +8,8 @@ WIDTH, HEIGHT = 1100, 650
 DELTA = {
     pg.K_UP: (0, -5),
     pg.K_DOWN: (0, +5),
-    pg.K_RIGHT: (-5, 0),
-    pg.K_LEFT: (+5, 0),
+    pg.K_RIGHT: (+5, 0),
+    pg.K_LEFT: (-5, 0),
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -46,6 +46,9 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+            if kk_rct.colliderect(bb_rct):
+                print("GAME OVER")
+                return  # gameover
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()
@@ -65,7 +68,7 @@ def main():
         if tate == False:
             vy *= -1
         screen.blit(kk_img, kk_rct)
-        screen.blit(bb_img, kk_rct)
+        screen.blit(bb_img, bb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)

@@ -25,7 +25,6 @@ ROTATE_KOUKATON = {
     pg.transform.rotate(kk_img, 45 * 6): (0, 5),
     pg.transform.rotate(kk_img, 45 * 7): (5, 5),
 }
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def check_bound(rct):
@@ -41,11 +40,13 @@ def check_bound(rct):
         tate = False
     return yoko, tate
 
+
 def game_over(img):
     """
     黒い背景と5秒間のカウントを行う
     引数: 背景用のimg
     (bg_imgの想定)
+    戻り値: なし
     """
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     clock = pg.time.Clock()
@@ -76,15 +77,17 @@ def game_over(img):
         clock.tick(1)
         print(f"{i + 1}秒")
 
+
 def get_rotate(sum_mv):
     """
     sum_mvの移動量からこうかとんの向きを決定する
     引数: sum_mvなどx, yの移動量
     戻り値: 回転されたこうかとんimg
     """
-    for img, mv in ROTATE_KOUKATON.items():
+    for img, mv in ROTATE_KOUKATON.items():  # 移動量の判定とimgの決定
         if mv == sum_mv:
             return img
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
